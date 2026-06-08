@@ -2,7 +2,7 @@
 
 A lightweight 4-digit PIN authentication plugin for [Paper](https://papermc.io) 26.1.2+.
 
-Players authenticate using a chest GUI numpad.
+Players authenticate using a clean chest GUI numpad - no commands to type, no mods required on the client side.
 
 ---
 
@@ -14,7 +14,6 @@ Players authenticate using a chest GUI numpad.
 - **Attempt limit** - players are kicked after 3 wrong attempts
 - **Timeout** - players are kicked if they take too long to enter their PIN
 - **SHA-256 hashed PINs** - PINs are never stored in plain text
-- **Bypass permission** - staff can skip authentication entirely
 - **Admin reset command** - reset any player's PIN from the console or in-game
 
 ---
@@ -25,7 +24,7 @@ Players authenticate using a chest GUI numpad.
 2. Place the `.jar` in your server's `plugins/` folder.
 3. Restart your server.
 
-**Requirements:** Paper 26.1.2+ · Java 25+
+**Requirements:** Paper 26.1.2+ - Java 25+
 
 ---
 
@@ -51,12 +50,6 @@ On joining, a PIN numpad GUI opens automatically.
 | `/vspadmin reset <player>` | Clears a player's PIN, forcing them to set a new one |
 
 Requires operator status (`op`).
-
-### Permissions
-
-| Permission | Default | Description |
-|---|---|---|
-| `vsp.bypass` | `false` | Skip PIN authentication on join |
 
 ---
 
@@ -91,4 +84,4 @@ Alternatively, every push to `main` triggers a [GitHub Actions](.github/workflow
 
 ## License
 
-[Apache License 2.0](LICENSE) © bananasquare
+[Apache License 2.0](LICENSE) - bananasquare
