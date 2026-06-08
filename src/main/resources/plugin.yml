@@ -1,0 +1,13 @@
+name: VSP
+version: ''
+main: pl.vsp.VSP
+api-version: '26.1'
+description: Very Simple PIN - lightweight 4-digit PIN authentication for Paper servers.
+authors: [ bananasquare ]
+website: https://modrinth.com/plugin/vsp
+
+commands:
+  vspadmin:
+    description: Administrative commands for VSP.
+    usage: /vspadmin reset <player>
+    permission: op
