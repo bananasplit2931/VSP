@@ -22,13 +22,17 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -44,6 +48,19 @@ public final class VSP extends JavaPlugin implements Listener {
     private static final Map<Integer, String> SLOT_TO_DIGIT = new LinkedHashMap<>();
     private static final int SLOT_DEL = 31;
     private static final int SLOT_OK = 49;
+    
+    private static final String SKULL_0  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTY3Y2FmNzU5MWIzOGUxMjVhODAxN2Q1OGNmYzY0MzNiZmFmODRjZDQ5OWQ3OTRmNDFkMTBiZmYyZTViODQwIn19fQ==";
+    private static final String SKULL_1  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMGViZTdlNTIxNTE2OWE2OTlhY2M2Y2VmYTdiNzNmZGIxMDhkYjg3YmI2ZGFlMjg0OWZiZTI0NzE0YjI3In19fQ==";
+    private static final String SKULL_2  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzFiYzJiY2ZiMmJkMzc1OWU2YjFlODZmYzdhNzk1ODVlMTEyN2RkMzU3ZmMyMDI4OTNmOWRlMjQxYmM5ZTUzMCJ9fX0=";
+    private static final String SKULL_3  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGNkOWVlZWU4ODM0Njg4ODFkODM4NDhhNDZiZjMwMTI0ODVjMjNmNzU3NTNiOGZiZTg0ODczNDE0MTk4NDcifX19";
+    private static final String SKULL_4  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWQ0ZWFlMTM5MzM4NjBhNmRmNWU4ZTk1NTY5M2I5NWE4YzNiMTVjMzZiOGI1ODc1MzJhYzA5OTZiYzM3ZTUifX19";
+    private static final String SKULL_5  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDJlNzhmYjIyNDI0MjMyZGMyN2I4MWZiY2I0N2ZkMjRjMWFjZjc2MDk4NzUzZjJkOWMyODU5ODI4N2RiNSJ9fX0=";
+    private static final String SKULL_6  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmQ1N2UzYmM4OGE2NTczMGUzMWExNGUzZjQxZTAzOGE1ZWNmMDg5MWE2YzI0MzY0M2I4ZTU0NzZhZTIifX19";
+    private static final String SKULL_7  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzM0YjM2ZGU3ZDY3OWI4YmJjNzI1NDk5YWRhZWYyNGRjNTE4ZjVhZTIzZTcxNjk4MWUxZGNjNmIyNzIwYWIifX19";
+    private static final String SKULL_8  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmRiNmViMjVkMWZhYWJlMzBjZjQ0NGRjNjMzYjU4MzI0NzVlMzgwOTZiN2UyNDAyYTNlYzQ3NmRkN2I5In19fQ==";
+    private static final String SKULL_9  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTkxOTQ5NzNhM2YxN2JkYTk5NzhlZDYyNzMzODM5OTcyMjI3NzRiNDU0Mzg2YzgzMTljMDRmMWY0Zjc0YzJiNSJ9fX0=";
+    private static final String SKULL_OK  = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDk5ODBjMWQyMTE4MDlhOWI2NTY1MDg4ZjU2YTM4ZjJlZjQ5MTE1YzEwNTRmYTY2MjQ1MTIyZTllZWVkZWNjMiJ9fX0=";
+    private static final String SKULL_DEL = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjEyZjNlZmU4NGEwZjY2NDZhODBkNDVjZWZlNDE4ZTE5OWQ5NjE5ZjhjMWZiNWY1YzVjMDA4YzYwMzA1OWFjMyJ9fX0=";
 
     static {
         SLOT_TO_DIGIT.put(28, "1"); SLOT_TO_DIGIT.put(29, "2"); SLOT_TO_DIGIT.put(30, "3");
@@ -89,7 +106,6 @@ public final class VSP extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
 
         lock(player);
         attempts.put(player.getUniqueId(), 0);
@@ -211,7 +227,7 @@ public final class VSP extends JavaPlugin implements Listener {
 
         boolean isFirstJoin = !hasPin(player);
         Component title = isFirstJoin
-                ? Component.text("Set your PIN — enter 4 digits", NamedTextColor.BLACK)
+                ? Component.text("Set your PIN. Enter 4 digits", NamedTextColor.BLACK)
                 : Component.text("Enter your PIN", NamedTextColor.BLACK);
 
         Inventory inv = Bukkit.createInventory(null, 54, title);
@@ -221,13 +237,19 @@ public final class VSP extends JavaPlugin implements Listener {
 
         refreshDisplay(inv, new StringBuilder());
 
-        inv.setItem(28, makeDigit("1")); inv.setItem(29, makeDigit("2")); inv.setItem(30, makeDigit("3"));
-        inv.setItem(37, makeDigit("4")); inv.setItem(38, makeDigit("5")); inv.setItem(39, makeDigit("6"));
-        inv.setItem(46, makeDigit("7")); inv.setItem(47, makeDigit("8")); inv.setItem(48, makeDigit("9"));
-        inv.setItem(43, makeDigit("0"));
+        inv.setItem(28, makeSkullDigit("1", SKULL_1));
+        inv.setItem(29, makeSkullDigit("2", SKULL_2));
+        inv.setItem(30, makeSkullDigit("3", SKULL_3));
+        inv.setItem(37, makeSkullDigit("4", SKULL_4));
+        inv.setItem(38, makeSkullDigit("5", SKULL_5));
+        inv.setItem(39, makeSkullDigit("6", SKULL_6));
+        inv.setItem(46, makeSkullDigit("7", SKULL_7));
+        inv.setItem(47, makeSkullDigit("8", SKULL_8));
+        inv.setItem(48, makeSkullDigit("9", SKULL_9));
+        inv.setItem(43, makeSkullDigit("0", SKULL_0));
 
-        inv.setItem(SLOT_DEL, makeItem(Material.RED_CONCRETE, "§c§l⌫  Delete"));
-        inv.setItem(SLOT_OK, makeItem(Material.LIME_CONCRETE, "§a§l✔  Confirm"));
+        inv.setItem(SLOT_DEL, makeSkullButton("§c§l⌫  Delete", SKULL_DEL));
+        inv.setItem(SLOT_OK,  makeSkullButton("§a§l✔  Confirm", SKULL_OK));
 
         player.openInventory(inv);
     }
@@ -241,13 +263,42 @@ public final class VSP extends JavaPlugin implements Listener {
             ));
         }
     }
-
-    private ItemStack makeDigit(String digit) {
-        ItemStack item = new ItemStack(Material.WHITE_CONCRETE);
-        ItemMeta meta = item.getItemMeta();
+    
+    private ItemStack makeSkullDigit(String digit, String textureValue) {
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        applySkullTexture(skull, textureValue);
+        SkullMeta meta = (SkullMeta) skull.getItemMeta();
         meta.displayName(Component.text("§f§l" + digit).decoration(TextDecoration.ITALIC, false));
-        item.setItemMeta(meta);
-        return item;
+        skull.setItemMeta(meta);
+        return skull;
+    }
+    
+    private ItemStack makeSkullButton(String name, String textureValue) {
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        applySkullTexture(skull, textureValue);
+        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        meta.displayName(Component.text(name).decoration(TextDecoration.ITALIC, false));
+        skull.setItemMeta(meta);
+        return skull;
+    }
+    
+    private void applySkullTexture(ItemStack skull, String textureValue) {
+        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        if (meta == null) return;
+        try {
+            PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID(), "VSP");
+            PlayerTextures textures = profile.getTextures();
+            String decoded = new String(Base64.getDecoder().decode(textureValue), StandardCharsets.UTF_8);
+            int urlStart = decoded.indexOf("\"url\":\"") + 7;
+            int urlEnd   = decoded.indexOf("\"", urlStart);
+            String skinUrl = decoded.substring(urlStart, urlEnd);
+            textures.setSkin(new URL(skinUrl));
+            profile.setTextures(textures);
+            meta.setOwnerProfile(profile);
+        } catch (Exception ex) {
+            getLogger().log(Level.WARNING, "Failed to apply skull texture: " + textureValue, ex);
+        }
+        skull.setItemMeta(meta);
     }
 
     private ItemStack makeItem(Material material, String name) {
@@ -263,7 +314,7 @@ public final class VSP extends JavaPlugin implements Listener {
             savePin(player, pin);
             login(player);
             player.sendMessage("§a[VSP] ✔ PIN set! You are now logged in.");
-            player.sendMessage("§7Your PIN is: §f" + pin + " §7— keep it safe!");
+            player.sendMessage("§7Your PIN is: §f" + pin + " §7 keep it safe!");
         } else {
             if (checkPin(player, pin)) {
                 login(player);
@@ -293,7 +344,7 @@ public final class VSP extends JavaPlugin implements Listener {
 
         Bukkit.getScheduler().runTaskLater(this, () -> {
             if (player.isOnline() && isLocked(player)) {
-                player.sendMessage("§e[VSP] ⚠ " + (TIMEOUT_SECS / 2) + " seconds remaining to enter your PIN!");
+                player.sendMessage("§e[VSP] ⚠ " + (TIMEOUT_SECS / 2) + " seconds remaining to enter your PIN.");
             }
         }, (long) (TIMEOUT_SECS / 2) * 20L);
 
@@ -422,7 +473,7 @@ public final class VSP extends JavaPlugin implements Listener {
             return Base64.getEncoder().encodeToString(
                     digest.digest(input.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException ex) {
-            getLogger().log(Level.SEVERE, "SHA-256 not available — storing PIN in plain text!", ex);
+            getLogger().log(Level.SEVERE, "SHA-256 not available, storing PIN in plain text!", ex);
             return input;
         }
     }
