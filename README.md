@@ -19,7 +19,7 @@ Players authenticate using a chest GUI numpad.
 
 ## Installation
 
-1. Download the latest `.jar` from [Releases](../../releases) or [Modrinth](https://modrinth.com/plugin/vsp).
+1. Download the latest `.jar` from [Modrinth](https://modrinth.com/plugin/vsp).
 2. Place the `.jar` in your server's `plugins/` folder.
 3. Restart your server.
 
