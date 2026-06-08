@@ -30,6 +30,8 @@ Players authenticate using a clean chest GUI numpad - no commands to type, no mo
 
 ## Usage
 
+VSP requires all players to authenticate with a 4-digit PIN before interacting with the server. The PIN is set on first join and must be entered on every subsequent join.
+
 ### Players
 
 On joining, a PIN numpad GUI opens automatically.
