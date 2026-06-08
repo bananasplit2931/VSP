@@ -2,8 +2,7 @@
 
 A lightweight 4-digit PIN authentication plugin for [Paper](https://papermc.io) 26.1.2+.
 
-Players authenticate using a clean chest GUI numpad - no commands to type, no mods required on the client side.
-
+Players authenticate using a clean chest GUI numpad.
 ---
 
 ## Features
