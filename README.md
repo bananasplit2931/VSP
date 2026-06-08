@@ -1,21 +1,21 @@
-# VSP — Very Simple PIN
+# VSP - Very Simple PIN
 
 A lightweight 4-digit PIN authentication plugin for [Paper](https://papermc.io) 26.1.2+.
 
-Players authenticate using a clean chest GUI numpad — no commands to type, no mods required on the client side.
+Players authenticate using a chest GUI numpad.
 
 ---
 
 ## Features
 
-- **PIN GUI** — chest-based numpad opens automatically on join
-- **First-time setup** — new players set their PIN on first join
-- **Fully locked until authenticated** — frozen, blinded, and protected from damage
-- **Attempt limit** — players are kicked after 3 wrong attempts
-- **Timeout** — players are kicked if they take too long to enter their PIN
-- **SHA-256 hashed PINs** — PINs are never stored in plain text
-- **Bypass permission** — staff can skip authentication entirely
-- **Admin reset command** — reset any player's PIN from the console or in-game
+- **PIN GUI** - chest-based numpad opens automatically on join
+- **First-time setup** - new players set their PIN on first join
+- **Fully locked until authenticated** - frozen, blinded, and protected from damage
+- **Attempt limit** - players are kicked after 3 wrong attempts
+- **Timeout** - players are kicked if they take too long to enter their PIN
+- **SHA-256 hashed PINs** - PINs are never stored in plain text
+- **Bypass permission** - staff can skip authentication entirely
+- **Admin reset command** - reset any player's PIN from the console or in-game
 
 ---
 
@@ -85,7 +85,7 @@ mvn clean package
 
 The compiled JAR will be in `target/VSP-1.0.0.jar`.
 
-Alternatively, every push to `main` triggers a [GitHub Actions](.github/workflows/build.yml) build — download the artifact from the **Actions** tab.
+Alternatively, every push to `main` triggers a [GitHub Actions](.github/workflows/build.yml) build - download the artifact from the **Actions** tab.
 
 ---
 
